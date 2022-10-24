@@ -2,6 +2,8 @@
 
 A Capacitor plugin for camera preview using [Dynamsoft Camera Enhancer](https://www.dynamsoft.com/camera-enhancer/overview/).
 
+[Online Demo](https://fastidious-squirrel-b4bc07.netlify.app/)
+
 ## Supported Platforms
 
 * Web
