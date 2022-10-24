@@ -130,9 +130,9 @@ export class CameraPreviewWeb extends WebPlugin implements CameraPreviewPlugin {
     if (this.camera) {
       try{
         if (options["on"]){
-          this.camera?.turnOnTorch();
+          await this.camera.turnOnTorch();
         }else{
-          this.camera?.turnOffTorch();
+          await this.camera.turnOffTorch();
         }
       } catch (e){
         throw new Error("Torch unsupported");

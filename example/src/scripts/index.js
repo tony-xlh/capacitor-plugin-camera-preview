@@ -106,7 +106,11 @@ async function zoomout(){
 }
 
 async function toggleTorch(){
-  let desiredStatus = !torchStatus;
-  await CameraPreview.toggleTorch({on:desiredStatus});
-  torchStatus = desiredStatus;  
+  try {
+    let desiredStatus = !torchStatus;
+    await CameraPreview.toggleTorch({on:desiredStatus});
+    torchStatus = desiredStatus;   
+  } catch (error) {
+    alert(error);
+  }
 }
