@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">camera-preview</string>
+    <string name="title_activity_main">camera-preview</string>
+    <string name="package_name">com.dynamsoft.camerapreview</string>
+    <string name="custom_url_scheme">com.dynamsoft.camerapreview</string>
+</resources>
