@@ -3,12 +3,12 @@ import { CameraPreview } from "capacitor-plugin-camera-preview";
 
 console.log('webpack starterkit');
 
-let closeBtn = document.getElementById("closeButton");
+let captureBtn = document.getElementById("captureButton");
 let zoominBtn = document.getElementById("zoominButton");
 let zoomoutBtn = document.getElementById("zoomoutButton");
 let startBtn =  document.getElementById("startBtn");
 startBtn.addEventListener("click",startCamera);
-closeBtn.addEventListener("click",closeCamera);
+captureBtn.addEventListener("click",captureAndClose);
 zoominBtn.addEventListener("click",zoomin);
 zoomoutBtn.addEventListener("click",zoomout);
 
@@ -42,7 +42,9 @@ function toggleControlsDisplay(show){
   }
 }
 
-async function closeCamera(){
+async function captureAndClose(){
+  let dataURL = await CameraPreview.takeSnapshot();
+  console.log(dataURL);
   await CameraPreview.stopCamera();
   toggleControlsDisplay(false);
 }
