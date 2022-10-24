@@ -1,5 +1,5 @@
 import { WebPlugin } from '@capacitor/core';
-import { CameraEnhancer, DCEFrame } from 'dynamsoft-camera-enhancer';
+import { CameraEnhancer, DCEFrame, PlayCallbackInfo } from 'dynamsoft-camera-enhancer';
 import { CameraPreviewPlugin, EnumResolution, ScanRegion } from './definitions';
 
 CameraEnhancer.defaultUIElementURL = "https://cdn.jsdelivr.net/npm/dynamsoft-camera-enhancer@3.1.0/dist/dce.ui.html";
@@ -12,6 +12,15 @@ export class CameraPreviewWeb extends WebPlugin implements CameraPreviewPlugin {
 
   async initialize(): Promise<void> {
     this.camera = await CameraEnhancer.createInstance();
+    this.camera.on("played", (playCallBackInfo:PlayCallbackInfo) => {
+      this.notifyListeners("onPlayed", {resolution:playCallBackInfo.width+"x"+playCallBackInfo.height});
+    });
+    await this.camera.setUIElement(CameraEnhancer.defaultUIElementURL);
+
+    this.camera.getUIElement().getElementsByClassName("dce-btn-close")[0].remove();
+    this.camera.getUIElement().getElementsByClassName("dce-sel-camera")[0].remove();
+    this.camera.getUIElement().getElementsByClassName("dce-sel-resolution")[0].remove();
+    this.camera.getUIElement().getElementsByClassName("dce-msg-poweredby")[0].remove();
   }
 
   async getResolution(): Promise<{ resolution: string; }> {

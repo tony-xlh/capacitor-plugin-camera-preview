@@ -15,6 +15,10 @@ initialize();
 
 async function initialize(){
   await CameraPreview.initialize();
+  await CameraPreview.removeAllListeners();
+  await CameraPreview.addListener('onPlayed', async (res) => {
+    console.log(res);
+  });
   startBtn.disabled = "";
 }
 
