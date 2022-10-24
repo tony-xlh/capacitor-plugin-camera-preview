@@ -1,5 +1,5 @@
 {
-  "name": "capacitor-plugin-camera-preview",
+  "name": "capacitor-plugin-dynamsoft-camera-preview",
   "version": "0.0.1",
   "description": "A Capacitor plugin for camera preview",
   "main": "dist/plugin.cjs.js",

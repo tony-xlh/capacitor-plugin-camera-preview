@@ -1,4 +1,4 @@
-# capacitor-plugin-camera-preview
+# capacitor-plugin-dynamsoft-camera-preview
 
 A Capacitor plugin for camera preview using [Dynamsoft Camera Enhancer](https://www.dynamsoft.com/camera-enhancer/overview/).
 
@@ -11,7 +11,7 @@ A Capacitor plugin for camera preview using [Dynamsoft Camera Enhancer](https://
 ## Install
 
 ```bash
-npm install capacitor-plugin-camera-preview
+npm install capacitor-plugin-dynamsoft-camera-preview
 npx cap sync
 ```
 

@@ -1,5 +1,5 @@
 import '../styles/index.scss';
-import { CameraPreview } from "capacitor-plugin-camera-preview";
+import { CameraPreview } from "capacitor-plugin-dynamsoft-camera-preview";
 
 console.log('webpack starterkit');
 
