@@ -58,6 +58,9 @@
   },
   "dependencies": {
     "@babel/polyfill": "^7.12.1",
+    "@capacitor/android": "^4.4.0",
+    "@capacitor/cli": "^4.3.0",
+    "@capacitor/core": "^4.3.0",
     "capacitor-plugin-dynamsoft-camera-preview": "file:..",
     "core-js": "^3.20.3"
   }
