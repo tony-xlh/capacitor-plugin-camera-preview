@@ -1,6 +1,12 @@
 # capacitor-plugin-camera-preview
 
-A Capacitor plugin for camera preview
+A Capacitor plugin for camera preview using [Dynamsoft Camera Enhancer](https://www.dynamsoft.com/camera-enhancer/overview/).
+
+## Supported Platforms
+
+* Web
+* Android (WIP)
+* iOS (WIP)
 
 ## Install
 
