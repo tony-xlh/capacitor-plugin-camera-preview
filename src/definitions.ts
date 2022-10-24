@@ -1,7 +1,7 @@
 import { PluginListenerHandle } from "@capacitor/core";
 
 export interface CameraPreviewPlugin {
-  initialize(options: { license: string }): Promise<void>;
+  initialize(): Promise<void>;
   getResolution(): Promise<{resolution: string}>;
   setResolution(options: {resolution: number}): Promise<void>;
   getAllCameras(): Promise<{cameras: string[]}>;
@@ -10,13 +10,14 @@ export interface CameraPreviewPlugin {
   setScanRegion(options: {region:ScanRegion}): Promise<void>;
   setZoom(options: {factor: number}): Promise<void>;
   setFocus(options: {x: number, y: number}): Promise<void>;
-  toggleTorch(options: {on: boolean}): Promise<void>;
+  setDefaultUIElementURL(url:string): Promise<void>;
   startCamera(): Promise<void>;
   stopCamera(): Promise<void>;
   pauseCamera(): Promise<void>;
   resumeCamera(): Promise<void>;
   takeSnapshot(): Promise<{base64:string}>;
   takePhoto(): Promise<{base64:string}>;
+  toggleTorch(options: {on: boolean}): Promise<void>;
   addListener(
     eventName: 'onPlayed',
     listenerFunc: onPlayedListener,
