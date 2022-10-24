@@ -2,6 +2,8 @@ import { WebPlugin } from '@capacitor/core';
 import { CameraEnhancer, DCEFrame } from 'dynamsoft-camera-enhancer';
 import { CameraPreviewPlugin, EnumResolution, ScanRegion } from './definitions';
 
+CameraEnhancer.defaultUIElementURL = "https://cdn.jsdelivr.net/npm/dynamsoft-camera-enhancer@3.1.0/dist/dce.ui.html";
+
 export class CameraPreviewWeb extends WebPlugin implements CameraPreviewPlugin {
   private camera:CameraEnhancer | undefined;
   async setDefaultUIElementURL(url: string): Promise<void> {
