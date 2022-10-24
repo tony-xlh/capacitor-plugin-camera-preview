@@ -6,11 +6,15 @@ console.log('webpack starterkit');
 let captureBtn = document.getElementById("captureButton");
 let zoominBtn = document.getElementById("zoominButton");
 let zoomoutBtn = document.getElementById("zoomoutButton");
-let startBtn =  document.getElementById("startBtn");
+let startBtn = document.getElementById("startBtn");
+let toggleTorchBtn = document.getElementById("toggleTorchButton");
 startBtn.addEventListener("click",startCamera);
 captureBtn.addEventListener("click",captureAndClose);
 zoominBtn.addEventListener("click",zoomin);
 zoomoutBtn.addEventListener("click",zoomout);
+toggleTorchBtn.addEventListener("click",toggleTorch);
+
+let torchStatus = false;
 
 initialize();
 
@@ -99,4 +103,10 @@ async function zoomin(){
 
 async function zoomout(){
   await CameraPreview.setZoom({factor:1.0});
+}
+
+async function toggleTorch(){
+  let desiredStatus = !torchStatus;
+  await CameraPreview.toggleTorch({on:desiredStatus});
+  torchStatus = desiredStatus;  
 }
