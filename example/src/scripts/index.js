@@ -4,11 +4,13 @@ import { CameraPreview } from "capacitor-plugin-camera-preview";
 console.log('webpack starterkit');
 
 let closeBtn = document.getElementById("closeButton");
-//let zoominButton = document.getElementById("zoominButton");
-//let zoomoutButton = document.getElementById("zoomoutButton");
+let zoominBtn = document.getElementById("zoominButton");
+let zoomoutBtn = document.getElementById("zoomoutButton");
 let startBtn =  document.getElementById("startBtn");
 startBtn.addEventListener("click",startCamera);
 closeBtn.addEventListener("click",closeCamera);
+zoominBtn.addEventListener("click",zoomin);
+zoomoutBtn.addEventListener("click",zoomout);
 
 initialize();
 
@@ -86,4 +88,12 @@ async function updateResolutionSelect(newRes){
   }
   resSelect.appendChild(new Option("got "+newRes,"got "+newRes));
   resSelect.selectedIndex = resSelect.length - 1;
+}
+
+async function zoomin(){
+  await CameraPreview.setZoom({factor:2.5});
+}
+
+async function zoomout(){
+  await CameraPreview.setZoom({factor:1.0});
 }
