@@ -43,8 +43,9 @@ function toggleControlsDisplay(show){
 }
 
 async function captureAndClose(){
-  let dataURL = await CameraPreview.takeSnapshot();
-  console.log(dataURL);
+  let result = await CameraPreview.takeSnapshot();
+  let base64 = result.base64;
+  document.getElementById("captured").src = "data:image/jpeg;base64," + base64;
   await CameraPreview.stopCamera();
   toggleControlsDisplay(false);
 }

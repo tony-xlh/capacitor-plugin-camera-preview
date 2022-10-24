@@ -50,11 +50,16 @@
       z-index: 999;
       position:absolute;
     }
+
+    #captured {
+      max-width: 100%;
+    }
   </style>
 </head>
 <body>
   <div>
     <button id="startBtn" disabled>Start Camera</button>
+    <img id="captured"/>
   </div>
   <div class="controls" style="display:none;">
     <select id="cameraSelect"></select>
