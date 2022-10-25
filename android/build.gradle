@@ -46,6 +46,14 @@ repositories {
     mavenCentral()
 }
 
+rootProject.allprojects {
+    repositories {
+        maven {
+            url "https://download2.dynamsoft.com/maven/aar"
+        }
+    }
+}
+
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
@@ -54,4 +62,11 @@ dependencies {
     testImplementation "junit:junit:$junitVersion"
     androidTestImplementation "androidx.test.ext:junit:$androidxJunitVersion"
     androidTestImplementation "androidx.test.espresso:espresso-core:$androidxEspressoCoreVersion"
+
+    def camerax_version = '1.1.0'
+    implementation "androidx.camera:camera-core:$camerax_version"
+    implementation "androidx.camera:camera-camera2:$camerax_version"
+    implementation "androidx.camera:camera-lifecycle:$camerax_version"
+    implementation "androidx.camera:camera-view:$camerax_version"
+    implementation 'com.dynamsoft:dynamsoftcameraenhancer:3.0.1'
 }
