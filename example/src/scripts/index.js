@@ -24,11 +24,13 @@ async function initialize(){
   await CameraPreview.addListener('onPlayed', async (res) => {
     console.log(res);
     updateResolutionSelect(res.resolution);
+    updateCameraSelect();
   });
   startBtn.disabled = "";
-  loadCameras();
-  loadResolutions();
   await CameraPreview.setScanRegion({region:{left:10,top:20,right:90,bottom:65,measuredByPercentage:1}});
+  await CameraPreview.requestCameraPermission();
+  await loadCameras();
+  loadResolutions();
 }
 
 async function startCamera(){
@@ -56,6 +58,7 @@ async function captureAndClose(){
 
 async function loadCameras(){
   let cameraSelect = document.getElementById("cameraSelect");
+  cameraSelect.innerHTML = "";
   let result = await CameraPreview.getAllCameras();
   let cameras = result.cameras;
   for (let i = 0; i < cameras.length; i++) {
@@ -70,6 +73,7 @@ async function loadCameras(){
 
 function loadResolutions(){
   let resSelect = document.getElementById("resolutionSelect");
+  resSelect.innerHTML = "";
   resSelect.appendChild(new Option("ask 480P", 1));
   resSelect.appendChild(new Option("ask 720P", 2));
   resSelect.appendChild(new Option("ask 1080P", 3));
@@ -95,6 +99,17 @@ async function updateResolutionSelect(newRes){
   }
   resSelect.appendChild(new Option("got "+newRes,"got "+newRes));
   resSelect.selectedIndex = resSelect.length - 1;
+}
+
+async function updateCameraSelect(){
+  let cameraSelect = document.getElementById("cameraSelect");
+  let selectedCamera = (await CameraPreview.getSelectedCamera()).selectedCamera;
+  for (let i = 0; i < cameraSelect.options.length; i++) {
+    if (cameraSelect.options[i].label === selectedCamera) {
+      cameraSelect.selectedIndex = i;
+      return;
+    }
+  }
 }
 
 async function zoomin(){

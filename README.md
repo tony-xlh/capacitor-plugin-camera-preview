@@ -38,6 +38,7 @@ npx cap sync
 * [`takeSnapshot()`](#takesnapshot)
 * [`takePhoto()`](#takephoto)
 * [`toggleTorch(...)`](#toggletorch)
+* [`requestCameraPermission()`](#requestcamerapermission)
 * [`addListener('onPlayed', ...)`](#addlisteneronplayed)
 * [`removeAllListeners()`](#removealllisteners)
 * [Interfaces](#interfaces)
@@ -235,6 +236,15 @@ toggleTorch(options: { on: boolean; }) => Promise<void>
 | Param         | Type                          |
 | ------------- | ----------------------------- |
 | **`options`** | <code>{ on: boolean; }</code> |
+
+--------------------
+
+
+### requestCameraPermission()
+
+```typescript
+requestCameraPermission() => Promise<void>
+```
 
 --------------------
 

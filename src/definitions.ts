@@ -18,6 +18,7 @@ export interface CameraPreviewPlugin {
   takeSnapshot(): Promise<{base64:string}>;
   takePhoto(): Promise<{base64:string}>;
   toggleTorch(options: {on: boolean}): Promise<void>;
+  requestCameraPermission(): Promise<void>;
   addListener(
     eventName: 'onPlayed',
     listenerFunc: onPlayedListener,
