@@ -65,6 +65,7 @@ function toggleControlsDisplay(show){
 }
 
 async function captureAndClose(){
+  stopDecoding();
   let result = await CameraPreview.takeSnapshot();
   let base64 = result.base64;
   document.getElementById("captured").src = "data:image/jpeg;base64," + base64;
