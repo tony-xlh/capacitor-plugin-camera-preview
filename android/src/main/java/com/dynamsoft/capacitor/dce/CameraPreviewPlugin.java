@@ -314,11 +314,15 @@ public class CameraPreviewPlugin extends Plugin {
     @PluginMethod
     public void takeSnapshot(PluginCall call){
         try {
-            Bitmap bitmap = mCameraEnhancer.getImage().toBitmap();
-            String base64 = bitmap2Base64(bitmap);
-            JSObject result = new JSObject();
-            result.put("base64",base64);
-            call.resolve(result);
+            if (mCameraEnhancer.getCameraState() == EnumCameraState.OPENED) {
+                Bitmap bitmap = mCameraEnhancer.getFrameFromBuffer(true).toBitmap();
+                String base64 = bitmap2Base64(bitmap);
+                JSObject result = new JSObject();
+                result.put("base64",base64);
+                call.resolve(result);
+            }else{
+                call.reject("camera is not open");
+            }
         } catch (CoreException e) {
             e.printStackTrace();
             call.reject(e.getMessage());
