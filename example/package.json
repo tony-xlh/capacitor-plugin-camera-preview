@@ -62,6 +62,7 @@
     "@capacitor/cli": "^4.3.0",
     "@capacitor/core": "^4.3.0",
     "capacitor-plugin-dynamsoft-camera-preview": "file:..",
-    "core-js": "^3.20.3"
+    "core-js": "^3.20.3",
+    "dynamsoft-javascript-barcode": "^9.3.0"
   }
 }

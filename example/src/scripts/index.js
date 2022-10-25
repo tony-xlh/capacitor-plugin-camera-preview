@@ -1,8 +1,12 @@
 import '../styles/index.scss';
 import { CameraPreview } from "capacitor-plugin-dynamsoft-camera-preview";
-
+import { BarcodeReader } from "dynamsoft-javascript-barcode";
+import { Capacitor } from '@capacitor/core';
 console.log('webpack starterkit');
 
+let reader;
+let interval;
+let decoding = false;
 let captureBtn = document.getElementById("captureButton");
 let zoominBtn = document.getElementById("zoominButton");
 let zoomoutBtn = document.getElementById("zoomoutButton");
@@ -26,16 +30,24 @@ async function initialize(){
     updateResolutionSelect(res.resolution);
     updateCameraSelect();
   });
-  startBtn.disabled = "";
   await CameraPreview.setScanRegion({region:{left:10,top:20,right:90,bottom:65,measuredByPercentage:1}});
   await CameraPreview.requestCameraPermission();
   await loadCameras();
   loadResolutions();
+  startBtn.disabled = "";
+  await initDBR();
+}
+
+async function initDBR() {
+  BarcodeReader.engineResourcePath = "https://cdn.jsdelivr.net/npm/dynamsoft-javascript-barcode@9.3.1/dist/";
+  BarcodeReader.license = "DLS2eyJoYW5kc2hha2VDb2RlIjoiMjAwMDAxLTE2NDk4Mjk3OTI2MzUiLCJvcmdhbml6YXRpb25JRCI6IjIwMDAwMSIsInNlc3Npb25QYXNzd29yZCI6IndTcGR6Vm05WDJrcEQ5YUoifQ==";
+  reader = await BarcodeReader.createInstance();
 }
 
 async function startCamera(){
   await CameraPreview.startCamera();
   toggleControlsDisplay(true);
+  startDecoding();
 }
 
 function toggleControlsDisplay(show){
@@ -129,3 +141,34 @@ async function toggleTorch(){
     alert(error);
   }
 }
+
+function startDecoding(){
+  decoding = false;
+  interval = setInterval(captureAndDecode,100);
+}
+
+function stopDecoding(){
+  clearInterval(interval);
+  decoding = false;
+}
+
+async function captureAndDecode(){
+  if (reader == null) {
+    return
+  }
+  if (decoding == true) {
+    return;
+  }
+  let results;
+  if (Capacitor.isNativePlatform()) {
+    let result = await CameraPreview.takeSnapshot();
+    let base64 = result.base64;
+    results = reader.decode(base64);
+  } else {
+    let result = await CameraPreview.takeSnapshot2();
+    let frame = result.frame;
+    results = reader.decode(frame);
+  }
+  console.log(results);
+}
+
