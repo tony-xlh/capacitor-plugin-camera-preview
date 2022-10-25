@@ -25,6 +25,7 @@ let torchStatus = false;
 initialize();
 
 async function initialize(){
+  startBtn.innerText = "Initializing...";
   await CameraPreview.initialize();
   await CameraPreview.removeAllListeners();
   await CameraPreview.addListener('onPlayed', async (res) => {
@@ -36,8 +37,9 @@ async function initialize(){
   await CameraPreview.requestCameraPermission();
   await loadCameras();
   loadResolutions();
-  startBtn.disabled = "";
   await initDBR();
+  startBtn.innerText = "Start Camera";
+  startBtn.disabled = "";
 }
 
 async function initDBR() {
