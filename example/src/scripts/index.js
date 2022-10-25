@@ -40,10 +40,10 @@ async function startCamera(){
 
 function toggleControlsDisplay(show){
   if (show) {
-    startBtn.style.display = "none";
+    document.getElementsByClassName("home")[0].style.display = "none";
     document.getElementsByClassName("controls")[0].style.display = "";
   }else {
-    startBtn.style.display = "";
+    document.getElementsByClassName("home")[0].style.display = "";
     document.getElementsByClassName("controls")[0].style.display = "none";
   }
 }
