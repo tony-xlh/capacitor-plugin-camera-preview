@@ -164,18 +164,22 @@ async function captureAndDecode(){
   if (decoding === true) {
     return;
   }
-  let results;
+  let results = [];
   let frame;
   let base64;
   decoding = true;
-  if (Capacitor.isNativePlatform()) {
-    let result = await CameraPreview.takeSnapshot();
-    base64 = result.base64;
-    results = await reader.decode(base64);
-  } else {
-    let result = await CameraPreview.takeSnapshot2();
-    frame = result.frame;
-    results = await reader.decode(frame);
+  try {
+    if (Capacitor.isNativePlatform()) {
+      let result = await CameraPreview.takeSnapshot();
+      base64 = result.base64;
+      results = await reader.decodeBase64String(base64);
+    } else {
+      let result = await CameraPreview.takeSnapshot2();
+      frame = result.frame;
+      results = await reader.decode(frame);
+    }  
+  } catch (error) {
+    console.log(error);
   }
   decoding = false;
   console.log(results);
