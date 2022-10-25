@@ -1,7 +1,9 @@
 import '../styles/index.scss';
+import { Capacitor } from '@capacitor/core';
 import { CameraPreview } from "capacitor-plugin-dynamsoft-camera-preview";
 import { BarcodeReader } from "dynamsoft-javascript-barcode";
-import { Capacitor } from '@capacitor/core';
+
+
 console.log('webpack starterkit');
 
 let reader;
@@ -39,7 +41,7 @@ async function initialize(){
 }
 
 async function initDBR() {
-  BarcodeReader.engineResourcePath = "https://cdn.jsdelivr.net/npm/dynamsoft-javascript-barcode@9.3.1/dist/";
+  BarcodeReader.engineResourcePath = "https://cdn.jsdelivr.net/npm/dynamsoft-javascript-barcode@9.3.0/dist/";
   BarcodeReader.license = "DLS2eyJoYW5kc2hha2VDb2RlIjoiMjAwMDAxLTE2NDk4Mjk3OTI2MzUiLCJvcmdhbml6YXRpb25JRCI6IjIwMDAwMSIsInNlc3Npb25QYXNzd29yZCI6IndTcGR6Vm05WDJrcEQ5YUoifQ==";
   reader = await BarcodeReader.createInstance();
 }
@@ -153,22 +155,51 @@ function stopDecoding(){
 }
 
 async function captureAndDecode(){
-  if (reader == null) {
-    return
+  if (reader === null) {
+    return;
   }
-  if (decoding == true) {
+  if (decoding === true) {
     return;
   }
   let results;
+  let frame;
+  let base64;
+  decoding = true;
   if (Capacitor.isNativePlatform()) {
     let result = await CameraPreview.takeSnapshot();
-    let base64 = result.base64;
-    results = reader.decode(base64);
+    base64 = result.base64;
+    results = await reader.decode(base64);
   } else {
     let result = await CameraPreview.takeSnapshot2();
-    let frame = result.frame;
-    results = reader.decode(frame);
+    frame = result.frame;
+    results = await reader.decode(frame);
   }
+  decoding = false;
   console.log(results);
+  if (results.length>0){
+    let dataURL;
+    if (frame) {
+      dataURL = frame.toCanvas().toDataURL('image/jpeg');
+    }
+    if (base64) {
+      dataURL = "data:image/jpeg;base64," + base64;
+    }
+    stopDecoding();
+    returnToHomeWithBarcodeResults(dataURL, results);
+  }
 }
 
+async function returnToHomeWithBarcodeResults(dataURL, results) {
+  document.getElementById("captured").src = dataURL;
+
+  let ol = document.getElementById("barcodeResults");
+  ol.innerHTML = "";
+  results.forEach(result => {
+    let item = document.createElement("li");
+    item.innerText = result.barcodeFormatString+": "+result.barcodeText;
+    ol.appendChild(item);
+  });
+
+  await CameraPreview.stopCamera();
+  toggleControlsDisplay(false);
+}
