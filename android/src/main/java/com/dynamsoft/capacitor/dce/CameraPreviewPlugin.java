@@ -2,8 +2,10 @@ package com.dynamsoft.capacitor.dce;
 
 import android.Manifest;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
+import android.util.Base64;
 import android.util.Log;
 import android.util.Size;
 import android.view.View;
@@ -15,9 +17,11 @@ import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
+import com.dynamsoft.core.CoreException;
 import com.dynamsoft.dce.CameraEnhancer;
 import com.dynamsoft.dce.CameraEnhancerException;
 import com.dynamsoft.dce.DCECameraView;
+import com.dynamsoft.dce.DCEPhotoListener;
 import com.dynamsoft.dce.EnumCameraState;
 import com.dynamsoft.dce.EnumResolution;
 import com.getcapacitor.JSArray;
@@ -29,6 +33,8 @@ import com.getcapacitor.PluginMethod;
 import com.getcapacitor.annotation.CapacitorPlugin;
 import com.getcapacitor.annotation.Permission;
 import com.getcapacitor.annotation.PermissionCallback;
+
+import java.io.ByteArrayOutputStream;
 
 @CapacitorPlugin(
     name = "CameraPreview",
@@ -305,6 +311,39 @@ public class CameraPreviewPlugin extends Plugin {
         }
     }
 
+    @PluginMethod
+    public void takeSnapshot(PluginCall call){
+        try {
+            Bitmap bitmap = mCameraEnhancer.getImage().toBitmap();
+            String base64 = bitmap2Base64(bitmap);
+            JSObject result = new JSObject();
+            result.put("base64",base64);
+            call.resolve(result);
+        } catch (CoreException e) {
+            e.printStackTrace();
+            call.reject(e.getMessage());
+        }
+    }
+
+    @PluginMethod
+    public void takePhoto(PluginCall call){
+        mCameraEnhancer.takePhoto(new DCEPhotoListener() {
+            @Override
+            public void photoOutputCallback(byte[] bytes) {
+                String base64 = Base64.encodeToString(bytes, Base64.DEFAULT);
+                JSObject result = new JSObject();
+                result.put("base64",base64);
+                call.resolve(result);
+            }
+        });
+    }
+
+    public static String bitmap2Base64(Bitmap bitmap) {
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, outputStream);
+        return Base64.encodeToString(outputStream.toByteArray(), Base64.DEFAULT);
+    }
+
     @Override
     protected void handleOnPause() {
         if (mCameraEnhancer!=null){
@@ -339,6 +378,8 @@ public class CameraPreviewPlugin extends Plugin {
             Log.d("DBR","no camera permission. request permission.");
             String[] aliases = new String[] { CAMERA };
             requestPermissionForAliases(aliases, call, "cameraPermissionsCallback");
+        }else{
+            call.resolve();
         }
     }
 
