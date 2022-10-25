@@ -16,7 +16,7 @@ export interface CameraPreviewPlugin {
   stopCamera(): Promise<void>;
   pauseCamera(): Promise<void>;
   resumeCamera(): Promise<void>;
-  takeSnapshot(): Promise<{base64:string}>;
+  takeSnapshot(options:{quality?:number}): Promise<{base64:string}>;
   takeSnapshot2(): Promise<{frame:DCEFrame}>;
   takePhoto(): Promise<{base64:string}>;
   toggleTorch(options: {on: boolean}): Promise<void>;

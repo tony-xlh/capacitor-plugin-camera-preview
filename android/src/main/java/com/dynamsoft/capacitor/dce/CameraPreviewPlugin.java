@@ -315,8 +315,12 @@ public class CameraPreviewPlugin extends Plugin {
     public void takeSnapshot(PluginCall call){
         try {
             if (mCameraEnhancer.getCameraState() == EnumCameraState.OPENED) {
+                int desiredQuality = 85;
+                if (call.hasOption("quality")) {
+                    desiredQuality = call.getInt("quality");
+                }
                 Bitmap bitmap = mCameraEnhancer.getFrameFromBuffer(true).toBitmap();
-                String base64 = bitmap2Base64(bitmap);
+                String base64 = bitmap2Base64(bitmap, desiredQuality);
                 JSObject result = new JSObject();
                 result.put("base64",base64);
                 call.resolve(result);
@@ -342,9 +346,9 @@ public class CameraPreviewPlugin extends Plugin {
         });
     }
 
-    public static String bitmap2Base64(Bitmap bitmap) {
+    public static String bitmap2Base64(Bitmap bitmap,int quality) {
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, outputStream);
+        bitmap.compress(Bitmap.CompressFormat.JPEG, quality, outputStream);
         return Base64.encodeToString(outputStream.toByteArray(), Base64.DEFAULT);
     }
 

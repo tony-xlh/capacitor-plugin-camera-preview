@@ -180,9 +180,13 @@ export class CameraPreviewWeb extends WebPlugin implements CameraPreviewPlugin {
     }
   }
 
-  async takeSnapshot(): Promise<{ base64: string; }> {
+  async takeSnapshot(options:{quality?:number}): Promise<{ base64: string;}> {
     if (this.camera) {
-      let dataURL = this.camera.getFrame().toCanvas().toDataURL('image/jpeg');
+      let desiredQuality = 85;
+      if (options.quality) {
+        desiredQuality = options.quality;
+      }
+      let dataURL = this.camera.getFrame().toCanvas().toDataURL('image/jpeg',desiredQuality);
       let base64 = dataURL.replace("data:image/jpeg;base64,","");
       return {base64:base64};
     }else{

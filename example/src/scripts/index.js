@@ -170,9 +170,10 @@ async function captureAndDecode(){
   decoding = true;
   try {
     if (Capacitor.isNativePlatform()) {
-      let result = await CameraPreview.takeSnapshot();
+      let result = await CameraPreview.takeSnapshot({quality:50});
       base64 = result.base64;
       results = await reader.decodeBase64String(base64);
+      console.log(base64);
     } else {
       let result = await CameraPreview.takeSnapshot2();
       frame = result.frame;
