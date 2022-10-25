@@ -323,7 +323,7 @@ public class CameraPreviewPlugin extends Plugin {
             }else{
                 call.reject("camera is not open");
             }
-        } catch (CoreException e) {
+        } catch (Exception e) {
             e.printStackTrace();
             call.reject(e.getMessage());
         }
@@ -346,6 +346,21 @@ public class CameraPreviewPlugin extends Plugin {
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         bitmap.compress(Bitmap.CompressFormat.JPEG, 100, outputStream);
         return Base64.encodeToString(outputStream.toByteArray(), Base64.DEFAULT);
+    }
+
+    @PluginMethod
+    public void isOpen(PluginCall call){
+        if (mCameraEnhancer != null) {
+            JSObject result = new JSObject();
+            if (mCameraEnhancer.getCameraState() == EnumCameraState.OPENED) {
+                result.put("isOpen",true);
+            }else{
+                result.put("isOpen",false);
+            }
+            call.resolve(result);
+        }else {
+            call.reject("DCE not initialized.");
+        }
     }
 
     @Override

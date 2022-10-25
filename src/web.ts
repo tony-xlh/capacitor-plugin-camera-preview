@@ -172,6 +172,14 @@ export class CameraPreviewWeb extends WebPlugin implements CameraPreviewPlugin {
     }
   }
 
+  async isOpen(): Promise<{isOpen:boolean}> {
+    if (this.camera) {
+      return {isOpen:this.camera.isOpen()};
+    }else{
+      throw new Error('DCE not initialized');
+    }
+  }
+
   async takeSnapshot(): Promise<{ base64: string; }> {
     if (this.camera) {
       let dataURL = this.camera.getFrame().toCanvas().toDataURL('image/jpeg');
