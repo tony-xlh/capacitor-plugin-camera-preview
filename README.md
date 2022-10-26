@@ -7,8 +7,8 @@ A Capacitor plugin for camera preview using [Dynamsoft Camera Enhancer](https://
 ## Supported Platforms
 
 * Web
-* Android (WIP)
-* iOS (WIP)
+* Android
+* iOS
 
 ## Install
 
