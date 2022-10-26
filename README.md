@@ -35,7 +35,7 @@ npx cap sync
 * [`stopCamera()`](#stopcamera)
 * [`pauseCamera()`](#pausecamera)
 * [`resumeCamera()`](#resumecamera)
-* [`takeSnapshot()`](#takesnapshot)
+* [`takeSnapshot(...)`](#takesnapshot)
 * [`takeSnapshot2()`](#takesnapshot2)
 * [`takePhoto()`](#takephoto)
 * [`toggleTorch(...)`](#toggletorch)
@@ -164,6 +164,8 @@ setFocus(options: { x: number; y: number; }) => Promise<void>
 setDefaultUIElementURL(url: string) => Promise<void>
 ```
 
+Web Only
+
 | Param     | Type                |
 | --------- | ------------------- |
 | **`url`** | <code>string</code> |
@@ -207,11 +209,17 @@ resumeCamera() => Promise<void>
 --------------------
 
 
-### takeSnapshot()
+### takeSnapshot(...)
 
 ```typescript
-takeSnapshot() => Promise<{ base64: string; }>
+takeSnapshot(options: { quality?: number; }) => Promise<{ base64: string; }>
 ```
+
+take a snapshot as base64.
+
+| Param         | Type                               |
+| ------------- | ---------------------------------- |
+| **`options`** | <code>{ quality?: number; }</code> |
 
 **Returns:** <code>Promise&lt;{ base64: string; }&gt;</code>
 
@@ -223,6 +231,8 @@ takeSnapshot() => Promise<{ base64: string; }>
 ```typescript
 takeSnapshot2() => Promise<{ frame: DCEFrame; }>
 ```
+
+take a snapshot as <a href="#dceframe">DCEFrame</a>. Web Only
 
 **Returns:** <code>Promise&lt;{ frame: <a href="#dceframe">DCEFrame</a>; }&gt;</code>
 

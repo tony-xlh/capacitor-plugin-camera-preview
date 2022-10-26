@@ -11,12 +11,21 @@ export interface CameraPreviewPlugin {
   setScanRegion(options: {region:ScanRegion}): Promise<void>;
   setZoom(options: {factor: number}): Promise<void>;
   setFocus(options: {x: number, y: number}): Promise<void>;
+  /**
+  * Web Only
+  */
   setDefaultUIElementURL(url:string): Promise<void>;
   startCamera(): Promise<void>;
   stopCamera(): Promise<void>;
   pauseCamera(): Promise<void>;
   resumeCamera(): Promise<void>;
+  /**
+  * take a snapshot as base64.
+  */
   takeSnapshot(options:{quality?:number}): Promise<{base64:string}>;
+  /**
+  * take a snapshot as DCEFrame. Web Only
+  */
   takeSnapshot2(): Promise<{frame:DCEFrame}>;
   takePhoto(): Promise<{base64:string}>;
   toggleTorch(options: {on: boolean}): Promise<void>;
