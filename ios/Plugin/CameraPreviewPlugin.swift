@@ -230,8 +230,8 @@ public class CameraPreviewPlugin: CAPPlugin {
             
             var ret = PluginCallResultData()
             if let img = frame.toUIImage() {
-                
-                let rotated = rotatedUIImage(image: img, orientation: frame.orientation)
+                let cropped = croppedUIImage(image: img, region: dce.getScanRegion(),degree: frame.orientation)
+                let rotated = rotatedUIImage(image: cropped, degree: frame.orientation)
                 let base64 = getBase64FromImage(image: rotated, quality: CGFloat(quality))
                 ret["base64"] = base64
                 call.resolve(ret)
@@ -241,9 +241,9 @@ public class CameraPreviewPlugin: CAPPlugin {
         }
     }
     
-    func rotatedUIImage(image:UIImage, orientation: Int) -> UIImage {
+    func rotatedUIImage(image:UIImage, degree: Int) -> UIImage {
         var rotatedImage = UIImage()
-        switch orientation
+        switch degree
         {
             case 90:
                 rotatedImage = UIImage(cgImage: image.cgImage!, scale: 1.0, orientation: .right)
@@ -253,6 +253,67 @@ public class CameraPreviewPlugin: CAPPlugin {
                 return image
         }
         return rotatedImage
+    }
+    
+    func croppedUIImage(image:UIImage, region:iRegionDefinition, degree: Int) -> UIImage {
+        let cgImage = image.cgImage
+        let imgWidth = Double(cgImage!.width)
+        let imgHeight = Double(cgImage!.height)
+        
+        var regionLeft = Double(region.regionLeft) / 100.0
+        var regionTop = Double(region.regionTop) / 100.0
+        var regionWidth = Double(region.regionRight - region.regionLeft) / 100.0
+        var regionHeight = Double(region.regionBottom - region.regionTop) / 100.0
+
+        if degree == 90 {
+            let temp1 = regionLeft
+            regionLeft = regionTop
+            regionTop = temp1
+            let temp2 = regionWidth
+            regionWidth = regionHeight
+            regionHeight = temp2
+            print("degree 90")
+        }else if degree == 180 {
+            regionTop = 1.0 - regionTop
+            print("degree 180")
+        }
+        let left:Double = regionLeft * imgWidth
+        let top:Double = regionTop * imgHeight
+        let width:Double = regionWidth * imgWidth
+        let height:Double = regionHeight * imgHeight
+        //print("imgWidth")
+        //print(imgWidth)
+        //print("regionTop")
+        //print(regionTop)
+        //print("top")
+        //print(top)
+        //print("regionleft")
+        //print(regionLeft)
+        //print("left")
+        //print(left)
+        //print("regionWidth")
+        //print(regionWidth)
+        //print("regionHeight")
+        //print(regionHeight)
+        //print("width")
+        //print(width)
+        //print("height")
+        //print(height)
+        
+        // The cropRect is the rect of the image to keep,
+        // in this case centered
+        let cropRect = CGRect(
+            x: left,
+            y: top,
+            width: width,
+            height: height
+        ).integral
+
+        let cropped = cgImage?.cropping(
+            to: cropRect
+        )!
+        let image = UIImage(cgImage: cropped!)
+        return image
     }
     
     func getBase64FromImage(image:UIImage, quality: CGFloat) -> String{
