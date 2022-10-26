@@ -6,6 +6,7 @@ import { BarcodeReader } from "dynamsoft-javascript-barcode";
 
 console.log('webpack starterkit');
 
+let onPlayedListener;
 let reader;
 let interval;
 let decoding = false;
@@ -27,8 +28,10 @@ initialize();
 async function initialize(){
   startBtn.innerText = "Initializing...";
   await CameraPreview.initialize();
-  await CameraPreview.removeAllListeners();
-  await CameraPreview.addListener('onPlayed', async (res) => {
+  if (onPlayedListener) {
+    await onPlayedListener.remove();
+  }
+  onPlayedListener = await CameraPreview.addListener('onPlayed', async (res) => {
     console.log(res);
     updateResolutionSelect(res.resolution);
     updateCameraSelect();
