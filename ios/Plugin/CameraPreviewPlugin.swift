@@ -230,13 +230,29 @@ public class CameraPreviewPlugin: CAPPlugin {
             
             var ret = PluginCallResultData()
             if let img = frame.toUIImage() {
-                let base64 = getBase64FromImage(image: img, quality: CGFloat(quality))
+                
+                let rotated = rotatedUIImage(image: img, orientation: frame.orientation)
+                let base64 = getBase64FromImage(image: rotated, quality: CGFloat(quality))
                 ret["base64"] = base64
                 call.resolve(ret)
             }else{
                 call.reject("Failed to take a snapshot")
             }
         }
+    }
+    
+    func rotatedUIImage(image:UIImage, orientation: Int) -> UIImage {
+        var rotatedImage = UIImage()
+        switch orientation
+        {
+            case 90:
+                rotatedImage = UIImage(cgImage: image.cgImage!, scale: 1.0, orientation: .right)
+            case 180:
+                rotatedImage = UIImage(cgImage: image.cgImage!, scale: 1.0, orientation: .down)
+            default:
+                return image
+        }
+        return rotatedImage
     }
     
     func getBase64FromImage(image:UIImage, quality: CGFloat) -> String{
