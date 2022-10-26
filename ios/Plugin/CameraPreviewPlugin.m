@@ -19,5 +19,7 @@ CAP_PLUGIN(CameraPreviewPlugin, "CameraPreview",
            CAP_PLUGIN_METHOD(resumeCamera, CAPPluginReturnPromise);
            CAP_PLUGIN_METHOD(takeSnapshot, CAPPluginReturnPromise);
            CAP_PLUGIN_METHOD(takePhoto, CAPPluginReturnPromise);
+           CAP_PLUGIN_METHOD(toggleTorch, CAPPluginReturnPromise);
+           CAP_PLUGIN_METHOD(requestCameraPermission, CAPPluginReturnPromise);
            CAP_PLUGIN_METHOD(isOpen, CAPPluginReturnPromise);
 )
