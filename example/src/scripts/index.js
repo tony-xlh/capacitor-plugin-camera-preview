@@ -36,8 +36,9 @@ async function initialize(){
     updateResolutionSelect(res.resolution);
     updateCameraSelect();
   });
-  await CameraPreview.setScanRegion({region:{left:10,top:20,right:90,bottom:65,measuredByPercentage:1}});
+  
   await CameraPreview.requestCameraPermission();
+  await CameraPreview.setScanRegion({region:{left:10,top:20,right:90,bottom:65,measuredByPercentage:1}});
   await loadCameras();
   loadResolutions();
   await initDBR();
@@ -176,7 +177,6 @@ async function captureAndDecode(){
       let result = await CameraPreview.takeSnapshot({quality:50});
       base64 = result.base64;
       results = await reader.decodeBase64String(base64);
-      console.log(base64);
     } else {
       let result = await CameraPreview.takeSnapshot2();
       frame = result.frame;

@@ -225,10 +225,10 @@ public class CameraPreviewPlugin: CAPPlugin {
         if (dce == nil){
             call.reject("DCE not initialized")
         }else{
-            let quality = call.getInt("quality",85);
-            let frame = dce.getFrameFromBuffer(false)
-            var ret = PluginCallResultData()
+            let quality = call.getInt("quality",85)
+            let frame = dce.getFrameFromBuffer(true)
             
+            var ret = PluginCallResultData()
             if let img = frame.toUIImage() {
                 let base64 = getBase64FromImage(image: img, quality: CGFloat(quality))
                 ret["base64"] = base64
@@ -245,7 +245,7 @@ public class CameraPreviewPlugin: CAPPlugin {
            return data.base64EncodedString()
        }
        return ""
-   }
+    }
     
     @objc func takePhoto(_ call: CAPPluginCall) {
         takeSnapshot(call)
