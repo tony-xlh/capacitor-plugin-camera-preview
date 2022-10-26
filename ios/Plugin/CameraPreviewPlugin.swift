@@ -168,12 +168,13 @@ public class CameraPreviewPlugin: CAPPlugin {
         if (dce == nil){
             call.reject("DCE not initialized")
         }else{
+            let region = call.getObject("region")
             let scanRegion = iRegionDefinition()
-            scanRegion.regionTop = call.getInt("top")!
-            scanRegion.regionBottom = call.getInt("bottom")!
-            scanRegion.regionLeft = call.getInt("left")!
-            scanRegion.regionRight = call.getInt("right")!
-            scanRegion.regionMeasuredByPercentage = call.getInt("measuredByPercentage")!
+            scanRegion.regionTop = region?["top"] as! Int
+            scanRegion.regionBottom = region?["bottom"] as! Int
+            scanRegion.regionLeft = region?["left"] as! Int
+            scanRegion.regionRight = region?["right"] as! Int
+            scanRegion.regionMeasuredByPercentage = region?["measuredByPercentage"] as! Int
             try? dce.setScanRegion(scanRegion)
             call.resolve()
         }
