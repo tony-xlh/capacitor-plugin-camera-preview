@@ -53,10 +53,12 @@ public class CameraPreviewPlugin: CAPPlugin {
         if (dce == nil){
             call.reject("DCE not initialized")
         }else{
-            if call.getBool("on", true){
-               dce.turnOnTorch()
-            } else{
-               dce.turnOffTorch()
+            DispatchQueue.main.sync {
+                if call.getBool("on", true){
+                   dce.turnOnTorch()
+                } else{
+                   dce.turnOffTorch()
+                }
             }
             call.resolve()
         }
@@ -67,7 +69,9 @@ public class CameraPreviewPlugin: CAPPlugin {
         if (dce == nil){
             call.reject("DCE not initialized")
         }else{
-            dce.close()
+            DispatchQueue.main.sync {
+                dce.close()
+            }
             call.resolve()
         }
     }
