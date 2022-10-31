@@ -72,7 +72,6 @@ export class CameraPreviewWeb extends WebPlugin implements CameraPreviewPlugin {
     }else {
       throw new Error('DCE not initialized');
     }
-    
   }
 
   async getSelectedCamera(): Promise<{ selectedCamera: string; }> {
