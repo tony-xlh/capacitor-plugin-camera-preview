@@ -232,7 +232,7 @@ public class CameraPreviewPlugin: CAPPlugin {
             if let img = frame.toUIImage() {
                 let cropped = croppedUIImage(image: img, region: dce.getScanRegion(),degree: frame.orientation)
                 let rotated = rotatedUIImage(image: cropped, degree: frame.orientation)
-                let base64 = getBase64FromImage(image: rotated, quality: CGFloat(quality))
+                let base64 = getBase64FromImage(image: rotated, quality: CGFloat(quality/100))
                 ret["base64"] = base64
                 call.resolve(ret)
             }else{
