@@ -236,7 +236,8 @@ public class CameraPreviewPlugin: CAPPlugin {
             if let img = frame.toUIImage() {
                 let cropped = croppedUIImage(image: img, region: dce.getScanRegion(),degree: frame.orientation)
                 let rotated = rotatedUIImage(image: cropped, degree: frame.orientation)
-                let base64 = getBase64FromImage(image: rotated, quality: CGFloat(quality/100))
+                let normalized = normalizedImage(rotated);
+                let base64 = getBase64FromImage(image: normalized, quality: CGFloat(quality/100))
                 ret["base64"] = base64
                 call.resolve(ret)
             }else{
@@ -318,6 +319,17 @@ public class CameraPreviewPlugin: CAPPlugin {
         )!
         let image = UIImage(cgImage: cropped!)
         return image
+    }
+    
+    func normalizedImage(_ image:UIImage) -> UIImage {
+        if image.imageOrientation == UIImage.Orientation.up {
+            return image
+        }
+        UIGraphicsBeginImageContextWithOptions(image.size, false, image.scale)
+        image.draw(in: CGRect(x:0,y:0,width:image.size.width,height:image.size.height))
+        let normalized = UIGraphicsGetImageFromCurrentImageContext()!
+        UIGraphicsEndImageContext();
+        return normalized
     }
     
     func getBase64FromImage(image:UIImage, quality: CGFloat) -> String{
