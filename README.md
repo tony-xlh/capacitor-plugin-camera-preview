@@ -10,6 +10,12 @@ A Capacitor plugin for camera preview using [Dynamsoft Camera Enhancer](https://
 * Android
 * iOS
 
+## Versions
+
+For Capacitor v5, use v2.x.
+
+For Capacitor v4, use v1.x.
+
 ## Install
 
 ```bash
