@@ -32,6 +32,7 @@
     "@babel/plugin-proposal-class-properties": "^7.16.7",
     "@babel/plugin-syntax-dynamic-import": "^7.8.3",
     "@babel/preset-env": "^7.16.8",
+    "@capacitor/cli": "^5.0.0",
     "babel-loader": "^8.2.3",
     "clean-webpack-plugin": "^4.0.0",
     "copy-webpack-plugin": "^10.2.0",
@@ -58,12 +59,11 @@
   },
   "dependencies": {
     "@babel/polyfill": "^7.12.1",
-    "@capacitor/android": "^4.4.0",
-    "@capacitor/cli": "^4.3.0",
-    "@capacitor/core": "^4.3.0",
-    "@capacitor/ios": "^4.4.0",
+    "@capacitor/android": "^5.0.0",
+    "@capacitor/core": "^5.0.0",
+    "@capacitor/ios": "^5.0.0",
     "capacitor-plugin-dynamsoft-camera-preview": "file:..",
     "core-js": "^3.20.3",
-    "dynamsoft-javascript-barcode": "^9.3.0"
+    "dynamsoft-javascript-barcode": "9.6.30"
   }
 }
