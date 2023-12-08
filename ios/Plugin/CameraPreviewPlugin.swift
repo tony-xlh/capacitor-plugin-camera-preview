@@ -7,24 +7,24 @@ import DynamsoftCameraEnhancer
  */
 @objc(CameraPreviewPlugin)
 public class CameraPreviewPlugin: CAPPlugin {
-    var dce:DynamsoftCameraEnhancer! = nil
+    static var dce:DynamsoftCameraEnhancer! = nil
     var dceView:DCECameraView! = nil
     @objc func initialize(_ call: CAPPluginCall) {
         // Initialize a camera view for previewing video.
         DispatchQueue.main.sync {
             dceView = DCECameraView.init(frame: (bridge?.viewController?.view.bounds)!)
             self.webView!.superview!.insertSubview(dceView, belowSubview: self.webView!)
-            dce = DynamsoftCameraEnhancer.init(view: dceView)
-            dce.setResolution(EnumResolution.EnumRESOLUTION_720P)
+            CameraPreviewPlugin.dce = DynamsoftCameraEnhancer.init(view: dceView)
+            CameraPreviewPlugin.dce.setResolution(EnumResolution.EnumRESOLUTION_720P)
         }
         call.resolve()
     }
     
     @objc func startCamera(_ call: CAPPluginCall) {
         makeWebViewTransparent()
-        if dce != nil {
+        if CameraPreviewPlugin.dce != nil {
             DispatchQueue.main.sync {
-                dce.open()
+                CameraPreviewPlugin.dce.open()
                 triggerOnPlayed()
             }
         }else{
@@ -50,14 +50,14 @@ public class CameraPreviewPlugin: CAPPlugin {
     }
     
     @objc func toggleTorch(_ call: CAPPluginCall) {
-        if (dce == nil){
+        if (CameraPreviewPlugin.dce == nil){
             call.reject("DCE not initialized")
         }else{
             DispatchQueue.main.sync {
                 if call.getBool("on", true){
-                   dce.turnOnTorch()
+                    CameraPreviewPlugin.dce.turnOnTorch()
                 } else{
-                   dce.turnOffTorch()
+                    CameraPreviewPlugin.dce.turnOffTorch()
                 }
             }
             call.resolve()
@@ -66,36 +66,36 @@ public class CameraPreviewPlugin: CAPPlugin {
     
     @objc func stopCamera(_ call: CAPPluginCall) {
         restoreWebViewBackground()
-        if (dce == nil){
+        if (CameraPreviewPlugin.dce == nil){
             call.reject("DCE not initialized")
         }else{
             DispatchQueue.main.sync {
-                dce.close()
+                CameraPreviewPlugin.dce.close()
             }
             call.resolve()
         }
     }
     
     @objc func resumeCamera(_ call: CAPPluginCall) {
-        if (dce == nil){
+        if (CameraPreviewPlugin.dce == nil){
             call.reject("DCE not initialized")
         }else{
-            dce.resume()
+            CameraPreviewPlugin.dce.resume()
             call.resolve()
         }
     }
     
     @objc func pauseCamera(_ call: CAPPluginCall) {
-        if (dce == nil){
+        if (CameraPreviewPlugin.dce == nil){
             call.reject("DCE not initialized")
         }else{
-            dce.pause()
+            CameraPreviewPlugin.dce.pause()
             call.resolve()
         }
     }
     
     @objc func setResolution(_ call: CAPPluginCall) {
-        if (dce == nil){
+        if (CameraPreviewPlugin.dce == nil){
             call.reject("DCE not initialized")
         }else{
             let res = call.getInt("resolution") ?? -1
@@ -103,7 +103,7 @@ public class CameraPreviewPlugin: CAPPlugin {
             
             if res != -1 {
                 let resolution = EnumResolution.init(rawValue: res)
-                dce.setResolution(resolution!)
+                CameraPreviewPlugin.dce.setResolution(resolution!)
                 triggerOnPlayed()
             }
             call.resolve()
@@ -111,12 +111,12 @@ public class CameraPreviewPlugin: CAPPlugin {
     }
     
     @objc func getResolution(_ call: CAPPluginCall) {
-        if (dce == nil){
+        if (CameraPreviewPlugin.dce == nil){
             call.reject("DCE not initialized")
         }else{
             var ret = PluginCallResultData()
-            let res = dce.getResolution();
-            dce.getResolution()
+            let res = CameraPreviewPlugin.dce.getResolution();
+            CameraPreviewPlugin.dce.getResolution()
             print("res: "+res)
             ret["resolution"] = res
             call.resolve(ret)
@@ -124,9 +124,9 @@ public class CameraPreviewPlugin: CAPPlugin {
     }
     
     @objc func triggerOnPlayed() {
-        if (dce != nil) {
+        if (CameraPreviewPlugin.dce != nil) {
             var ret = PluginCallResultData()
-            let res = dce.getResolution()
+            let res = CameraPreviewPlugin.dce.getResolution()
             ret["resolution"] = res
             print("trigger on played")
             notifyListeners("onPlayed", data: ret)
@@ -134,34 +134,34 @@ public class CameraPreviewPlugin: CAPPlugin {
     }
     
     @objc func getAllCameras(_ call: CAPPluginCall) {
-        if (dce == nil){
+        if (CameraPreviewPlugin.dce == nil){
             call.reject("DCE not initialized")
         }else{
             var ret = PluginCallResultData()
             let array = NSMutableArray();
-            array.addObjects(from: dce.getAllCameras())
+            array.addObjects(from: CameraPreviewPlugin.dce.getAllCameras())
             ret["cameras"] = array
             call.resolve(ret)
         }
     }
     
     @objc func getSelectedCamera(_ call: CAPPluginCall) {
-        if (dce == nil){
+        if (CameraPreviewPlugin.dce == nil){
             call.reject("DCE not initialized")
         }else{
             var ret = PluginCallResultData()
-            ret["selectedCamera"] = dce.getSelectedCamera()
+            ret["selectedCamera"] = CameraPreviewPlugin.dce.getSelectedCamera()
             call.resolve(ret)
         }
     }
     
     @objc func selectCamera(_ call: CAPPluginCall) {
-        if (dce == nil){
+        if (CameraPreviewPlugin.dce == nil){
             call.reject("DCE not initialized")
         }else{
             let cameraID = call.getString("cameraID") ?? ""
             if cameraID != "" {
-                try? dce.selectCamera(cameraID)
+                try? CameraPreviewPlugin.dce.selectCamera(cameraID)
                 triggerOnPlayed()
             }
             call.resolve()
@@ -169,7 +169,7 @@ public class CameraPreviewPlugin: CAPPlugin {
     }
     
     @objc func setScanRegion(_ call: CAPPluginCall) {
-        if (dce == nil){
+        if (CameraPreviewPlugin.dce == nil){
             call.reject("DCE not initialized")
         }else{
             let region = call.getObject("region")
@@ -179,29 +179,29 @@ public class CameraPreviewPlugin: CAPPlugin {
             scanRegion.regionLeft = region?["left"] as! Int
             scanRegion.regionRight = region?["right"] as! Int
             scanRegion.regionMeasuredByPercentage = region?["measuredByPercentage"] as! Int
-            try? dce.setScanRegion(scanRegion)
+            try? CameraPreviewPlugin.dce.setScanRegion(scanRegion)
             call.resolve()
         }
     }
     
     @objc func setZoom(_ call: CAPPluginCall) {
-        if (dce == nil){
+        if (CameraPreviewPlugin.dce == nil){
             call.reject("DCE not initialized")
         }else{
             let factor:CGFloat = CGFloat(call.getFloat("factor") ?? 1.0)
-            dce.setZoom(factor)
+            CameraPreviewPlugin.dce.setZoom(factor)
             call.resolve()
         }
     }
     
     @objc func setFocus(_ call: CAPPluginCall) {
-        if (dce == nil){
+        if (CameraPreviewPlugin.dce == nil){
             call.reject("DCE not initialized")
         }else{
             let x = call.getFloat("x", -1.0);
             let y = call.getFloat("y", -1.0);
             if x != -1.0 && y != -1.0 {
-                dce.setFocus(CGPoint(x: CGFloat(x), y: CGFloat(y)))
+                CameraPreviewPlugin.dce.setFocus(CGPoint(x: CGFloat(x), y: CGFloat(y)))
             }
             call.resolve()
         }
@@ -212,11 +212,11 @@ public class CameraPreviewPlugin: CAPPlugin {
     }
     
     @objc func isOpen(_ call: CAPPluginCall) {
-        if (dce == nil){
+        if (CameraPreviewPlugin.dce == nil){
             call.reject("DCE not initialized")
         }else{
             var ret = PluginCallResultData()
-            if dce.getCameraState() == EnumCameraState.EnumCAMERA_STATE_OPENED {
+            if CameraPreviewPlugin.dce.getCameraState() == EnumCameraState.EnumCAMERA_STATE_OPENED {
                 ret["isOpen"] = true
             } else {
                 ret["isOpen"] = false
@@ -225,23 +225,45 @@ public class CameraPreviewPlugin: CAPPlugin {
         }
     }
     
-    @objc func takeSnapshot(_ call: CAPPluginCall) {
-        if (dce == nil){
-            call.reject("DCE not initialized")
+    @objc static func getBitmap() -> UIImage? {
+        if (CameraPreviewPlugin.dce == nil){
+            return nil
         }else{
-            let quality = call.getInt("quality",85)
-            let frame = dce.getFrameFromBuffer(true)
-            
+            let frame = CameraPreviewPlugin.dce.getFrameFromBuffer(true)
             var ret = PluginCallResultData()
             if let img = frame.toUIImage() {
                 var cropped:UIImage
                 if frame.isCropped {
-                   cropped = croppedUIImage(image: img, region: dce.getScanRegion(),degree: frame.orientation)
+                    cropped = croppedUIImage(image: img, region: CameraPreviewPlugin.dce.getScanRegion(),degree: frame.orientation)
                 } else {
                     cropped = img
                 }
                 let rotated = rotatedUIImage(image: cropped, degree: frame.orientation)
                 let normalized = normalizedImage(rotated);
+                return normalized
+            }else{
+                return nil
+            }
+        }
+    }
+    
+    @objc func takeSnapshot(_ call: CAPPluginCall) {
+        if (CameraPreviewPlugin.dce == nil){
+            call.reject("DCE not initialized")
+        }else{
+            let quality = call.getInt("quality",85)
+            let frame = CameraPreviewPlugin.dce.getFrameFromBuffer(true)
+            
+            var ret = PluginCallResultData()
+            if let img = frame.toUIImage() {
+                var cropped:UIImage
+                if frame.isCropped {
+                    cropped = CameraPreviewPlugin.croppedUIImage(image: img, region: CameraPreviewPlugin.dce.getScanRegion(),degree: frame.orientation)
+                } else {
+                    cropped = img
+                }
+                let rotated = CameraPreviewPlugin.rotatedUIImage(image: cropped, degree: frame.orientation)
+                let normalized = CameraPreviewPlugin.normalizedImage(rotated);
                 let base64 = getBase64FromImage(image: normalized, quality: CGFloat(quality/100))
                 ret["base64"] = base64
                 call.resolve(ret)
@@ -251,7 +273,7 @@ public class CameraPreviewPlugin: CAPPlugin {
         }
     }
     
-    func rotatedUIImage(image:UIImage, degree: Int) -> UIImage {
+    static func rotatedUIImage(image:UIImage, degree: Int) -> UIImage {
         var rotatedImage = UIImage()
         switch degree
         {
@@ -265,7 +287,7 @@ public class CameraPreviewPlugin: CAPPlugin {
         return rotatedImage
     }
     
-    func croppedUIImage(image:UIImage, region:iRegionDefinition, degree: Int) -> UIImage {
+    static func croppedUIImage(image:UIImage, region:iRegionDefinition, degree: Int) -> UIImage {
         let cgImage = image.cgImage
         let imgWidth = Double(cgImage!.width)
         let imgHeight = Double(cgImage!.height)
@@ -326,7 +348,7 @@ public class CameraPreviewPlugin: CAPPlugin {
         return image
     }
     
-    func normalizedImage(_ image:UIImage) -> UIImage {
+    static func normalizedImage(_ image:UIImage) -> UIImage {
         if image.imageOrientation == UIImage.Orientation.up {
             return image
         }
