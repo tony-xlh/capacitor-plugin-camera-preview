@@ -45,7 +45,7 @@ import java.io.ByteArrayOutputStream;
 public class CameraPreviewPlugin extends Plugin {
     // Permission alias constants
     static final String CAMERA = "camera";
-    private CameraEnhancer mCameraEnhancer;
+    static public CameraEnhancer mCameraEnhancer;
     private DCECameraView mCameraView;
     private EnumCameraState previousCameraStatus;
     private String callbackID;
@@ -308,6 +308,19 @@ public class CameraPreviewPlugin extends Plugin {
             JSObject result = new JSObject();
             result.put("resolution",res);
             call.resolve(result);
+        }
+    }
+
+    static public Bitmap getBitmap(){
+        try {
+            if (mCameraEnhancer.getCameraState() == EnumCameraState.OPENED) {
+                Bitmap bitmap = mCameraEnhancer.getFrameFromBuffer(true).toBitmap();
+                return bitmap;
+            }else{
+                return null;
+            }
+        } catch (Exception e) {
+            return null;
         }
     }
 
