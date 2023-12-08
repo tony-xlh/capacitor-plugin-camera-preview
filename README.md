@@ -23,6 +23,27 @@ npm install capacitor-plugin-dynamsoft-camera-preview
 npx cap sync
 ```
 
+## Get Bitmap/UIImage via Reflection
+
+If you are developing a plugin, you can use reflection to get the camera frames as Bitmap or UIImage on the native side.
+
+Java:
+
+```java
+Class cls = Class.forName("com.dynamsoft.capacitor.dce.CameraPreviewPlugin");
+Method m = cls.getMethod("getBitmap",null);
+Bitmap bitmap = (Bitmap) m.invoke(null, null);
+```
+
+Objective-C:
+
+```objc
+- (UIImage*)getUIImage{
+    UIImage *image = ((UIImage* (*)(id, SEL))objc_msgSend)(objc_getClass("CameraPreviewPlugin"), sel_registerName("getBitmap"));
+    return image;
+}
+```
+
 ## API
 
 <docgen-index>
