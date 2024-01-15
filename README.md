@@ -4,6 +4,8 @@ A Capacitor plugin for camera preview using [Dynamsoft Camera Enhancer](https://
 
 [Online Demo](https://fastidious-squirrel-b4bc07.netlify.app/)
 
+Note: This package is not actively maintained. Please use [capacitor-plugin-camera](https://www.npmjs.com/package/capacitor-plugin-camera).
+
 ## Supported Platforms
 
 * Web
